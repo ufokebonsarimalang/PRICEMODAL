@@ -37,6 +37,23 @@ button{
   padding:15px;
   border-radius:10px;
 }
+
+.sjbox{
+  display:flex;
+  margin-bottom:10px;
+}
+
+.sjprefix{
+  background:#334155;
+  padding:12px;
+  border-radius:8px 0 0 8px;
+  white-space:nowrap;
+}
+
+.sjinput{
+  margin-bottom:0;
+  border-radius:0 8px 8px 0;
+}
 </style>
 
 </head>
@@ -49,19 +66,22 @@ button{
 
 <select id="driver">
   <option value="">Pilih Driver</option>
-  <option value="BUDI">BUDI</option>
-  <option value="ANDI">ANDI</option>
-  <option value="JOKO">JOKO</option>
+  <option value="PONIADI">PONIADI</option>
+  <option value="EKO">EKO</option>
+  <option value="SENDI">SENDI</option>
 </select>
 
 <select id="kernet">
   <option value="">Pilih Kernet</option>
+  <option value="DWI">DWI</option>
+  <option value="FRIZA">FRIZA</option>
   <option value="RUDI">RUDI</option>
-  <option value="AGUS">AGUS</option>
-  <option value="DENI">DENI</option>
 </select>
 
-<input id="sj" placeholder="No Surat Jalan">
+<div class="sjbox">
+  <span class="sjprefix">2605/</span>
+  <input id="sj" class="sjinput" placeholder="Nomor SJ">
+</div>
 
 <select id="tipe">
   <option value="DK">DK</option>
@@ -92,7 +112,7 @@ function kirim(){
     body: JSON.stringify({
       driver: driver.value,
       kernet: kernet.value,
-      sj: sj.value,
+      sj: "2605/" + sj.value,
       tipe: tipe.value
     })
   })
