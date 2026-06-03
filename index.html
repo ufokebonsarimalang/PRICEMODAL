@@ -79,7 +79,7 @@ button{
 </select>
 
 <div class="sjbox">
-  <span class="sjprefix">2605/</span>
+  <span class="sjprefix" id="prefixSJ"></span>
   <input id="sj" class="sjinput" placeholder="Nomor SJ">
 </div>
 
@@ -97,7 +97,14 @@ button{
 <script>
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbx0y4uB9HiQFRRclbeoVH73IxppnjYB5dWX_JLJO96G14eNLQ1bFRCK1TsKaJ9-OxS3/exec";
+const sekarang = new Date();
 
+const prefixSJ =
+String(sekarang.getFullYear()).slice(-2) +
+String(sekarang.getMonth() + 1).padStart(2,'0') +
+"/";
+
+document.getElementById("prefixSJ").innerText = prefixSJ;
 function kirim(){
 
   if(!driver.value || !sj.value){
@@ -112,7 +119,7 @@ function kirim(){
     body: JSON.stringify({
       driver: driver.value,
       kernet: kernet.value,
-      sj: "2605/" + sj.value,
+      sj: prefixSJ + sj.value,
       tipe: tipe.value
     })
   })
