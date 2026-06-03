@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rate Pengiriman</title>
+
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  padding:15px;
+  background:#0f172a;
+  color:white;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:none;
+  box-sizing:border-box;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  background:#22c55e;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+.box{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>📦 INPUT RATE PENGIRIMAN</h2>
+
+<div class="box">
+
+<input id="driver" placeholder="Nama Driver">
+<input id="kernet" placeholder="Nama Kernet">
+<input id="sj" placeholder="No Surat Jalan">
+
+<select id="tipe">
+  <option value="DK">DK</option>
+  <option value="LK">LK</option>
+</select>
+
+<button onclick="kirim()">SIMPAN</button>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx0y4uB9HiQFRRclbeoVH73IxppnjYB5dWX_JLJO96G14eNLQ1bFRCK1TsKaJ9-OxS3/exec";
+
+function kirim(){
+
+  if(!driver.value || !sj.value){
+    document.getElementById("status").innerText = "Driver & SJ wajib diisi";
+    return;
+  }
+
+  document.getElementById("status").innerText = "Mengirim...";
+
+  fetch(GAS_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      driver: driver.value,
+      kernet: kernet.value,
+      sj: sj.value,
+      tipe: tipe.value
+    })
+  })
+  .then(r=>r.text())
+  .then(res=>{
+
+    document.getElementById("status").innerText = "SUKSES ✔";
+
+    driver.value="";
+    kernet.value="";
+    sj.value="";
+    tipe.value="DK";
+
+  })
+  .catch(()=>{
+
+    document.getElementById("status").innerText = "ERROR ❌";
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
