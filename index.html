@@ -1,96 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Master Harga</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Master Harga</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #f4f6fb;
-    }
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f6fb;
+}
 
-    .header {
-      background: #1e88e5;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
+.header {
+  background: #1e88e5;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+}
 
-    .card {
-      margin: 15px;
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
+.card {
+  margin: 15px;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #1e88e5;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+button {
+  width: 100%;
+  padding: 12px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
 
-    .item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
+.item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
 
-    .harga {
-      font-weight: bold;
-      color: green;
-      font-size: 16px;
-    }
-  </style>
+.harga {
+  font-weight: bold;
+  color: green;
+}
+</style>
+
 </head>
 
 <body>
 
-<div class="header">
-  💰 MASTER HARGA TOKO
-</div>
+<div class="header">💰 MASTER HARGA TOKO</div>
 
 <div class="card">
   <input id="tipe" placeholder="Cari tipe (contoh: A14)">
   <button onclick="cari()">CARI</button>
 </div>
 
-<div class="card" id="hasil">
-  Hasil akan muncul di sini
-</div>
+<div class="card" id="hasil">Hasil akan muncul di sini</div>
 
 <script>
+
 const API_URL = "https://script.google.com/macros/s/AKfycbwji5nEEIX2kDDhTygYVg9zAqiZd3ppBzWPr8UH-eLRcE56EeDP187BOliW4JW0F2a64Q/exec";
 
-// 🔥 FORMAT RUPIAH (3.298.000)
+// format rupiah
 function formatRupiah(angka) {
   return angka.toLocaleString('id-ID');
 }
 
 function cari() {
+
   let tipe = document.getElementById("tipe").value;
+  let h = document.getElementById("hasil");
+
+  h.innerHTML = "⏳ mencari...";
 
   fetch(API_URL + "?tipe=" + tipe)
   .then(res => res.json())
   .then(data => {
 
-    let h = document.getElementById("hasil");
-
-    if(!data || data.length === 0){
+    if (!data || data.length === 0) {
       h.innerHTML = "❌ Tidak ditemukan";
       return;
     }
@@ -103,6 +102,7 @@ function cari() {
           <b>${item.brand}</b><br>
           ${item.tipe}<br>
           Modal: ${formatRupiah(item.modal)}<br>
+          Margin: ${formatRupiah(item.margin)}<br>
           <span class="harga">Rp ${formatRupiah(item.harga)}</span>
         </div>
       `;
@@ -110,11 +110,11 @@ function cari() {
 
     h.innerHTML = html;
   })
-  .catch(err => {
-    document.getElementById("hasil").innerHTML =
-      "❌ Error koneksi API";
+  .catch(() => {
+    h.innerHTML = "❌ Error koneksi API";
   });
 }
+
 </script>
 
 </body>
