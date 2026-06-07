@@ -1,147 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rate Pengiriman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master Harga</title>
 
-<style>
-body{
-  font-family:Arial;
-  margin:0;
-  padding:15px;
-  background:#0f172a;
-  color:white;
-}
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6fb;
+    }
 
-input,select{
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:8px;
-  border:none;
-  box-sizing:border-box;
-}
+    .header {
+      background: #1e88e5;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
 
-button{
-  width:100%;
-  padding:14px;
-  background:#22c55e;
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-}
+    .card {
+      margin: 15px;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
 
-.box{
-  background:#1e293b;
-  padding:15px;
-  border-radius:10px;
-}
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
 
-.sjbox{
-  display:flex;
-  margin-bottom:10px;
-}
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
 
-.sjprefix{
-  background:#334155;
-  padding:12px;
-  border-radius:8px 0 0 8px;
-  white-space:nowrap;
-}
+    .item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
 
-.sjinput{
-  margin-bottom:0;
-  border-radius:0 8px 8px 0;
-}
-</style>
-
+    .harga {
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
 
 <body>
 
-<div style="text-align:center;margin-bottom:15px;">   <img src="logo.png"        style="width:100px;height:100px;border-radius:50%;object-fit:cover;">   <h2>INPUT RATE PENGIRIMAN</h2> </div>
-
-<div class="box">
-
-<select id="driver">
-  <option value="">Pilih Driver</option>
-  <option value="PONIADI">PONIADI</option>
-  <option value="EKO">EKO</option>
-  <option value="SENDI">SENDI</option>
-</select>
-
-<select id="kernet">
-  <option value="">Pilih Kernet</option>
-  <option value="DWI">DWI</option>
-  <option value="FRIZA">FRIZA</option>
-  <option value="RUDI">RUDI</option>
-</select>
-
-<div class="sjbox">
-  <span class="sjprefix" id="prefixSJ"></span>
-  <input id="sj" class="sjinput" placeholder="Nomor SJ">
+<div class="header">
+  💰 MASTER HARGA TOKO
 </div>
 
-<select id="tipe">
-  <option value="DK">DK</option>
-  <option value="LK">LK</option>
-</select>
+<div class="card">
+  <input id="tipe" placeholder="Cari tipe (contoh: A14)">
+  <button onclick="cari()">CARI</button>
+</div>
 
-<button onclick="kirim()">SIMPAN</button>
-
-<p id="status"></p>
-
+<div class="card" id="hasil">
+  Hasil akan muncul di sini
 </div>
 
 <script>
+const API_URL = "https://script.google.com/macros/s/XXXXX/exec";
+// 🔥 ganti dengan URL Apps Script kamu
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx0y4uB9HiQFRRclbeoVH73IxppnjYB5dWX_JLJO96G14eNLQ1bFRCK1TsKaJ9-OxS3/exec";
-const sekarang = new Date();
+function cari() {
+  let tipe = document.getElementById("tipe").value;
 
-const prefixSJ =
-String(sekarang.getFullYear()).slice(-2) +
-String(sekarang.getMonth() + 1).padStart(2,'0') +
-"/";
+  fetch(API_URL + "?tipe=" + tipe)
+  .then(res => res.json())
+  .then(data => {
 
-document.getElementById("prefixSJ").innerText = prefixSJ;
-function kirim(){
+    let h = document.getElementById("hasil");
 
-  if(!driver.value || !sj.value){
-    document.getElementById("status").innerText = "Driver & SJ wajib diisi";
-    return;
-  }
+    if(data.length === 0){
+      h.innerHTML = "❌ Tidak ditemukan";
+      return;
+    }
 
-  document.getElementById("status").innerText = "Mengirim...";
+    let html = "";
 
-  fetch(GAS_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      driver: driver.value,
-      kernet: kernet.value,
-      sj: prefixSJ + sj.value,
-      tipe: tipe.value
-    })
-  })
-  .then(r=>r.text())
-  .then(res=>{
+    data.forEach(item => {
+      html += `
+        <div class="item">
+          <b>${item.brand}</b><br>
+          ${item.tipe}<br>
+          Modal: ${item.modal}<br>
+          <span class="harga">Rp ${item.harga}</span>
+        </div>
+      `;
+    });
 
-    document.getElementById("status").innerText = "SUKSES ✔";
-
-    driver.value="";
-    kernet.value="";
-    sj.value="";
-    tipe.value="DK";
-
-  })
-  .catch(()=>{
-
-    document.getElementById("status").innerText = "ERROR ❌";
-
+    h.innerHTML = html;
   });
-
 }
-
 </script>
 
 </body>
