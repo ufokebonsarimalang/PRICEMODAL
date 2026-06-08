@@ -27,20 +27,16 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
 
-    /* ✅ HANYA INI TAMBAHAN UNTUK CENTER INPUT */
-    .search-box {
-      display: flex;
-      justify-content: center;
-    }
-
     input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ddd;
-      box-sizing: border-box;
+
+      /* ✅ INI SAJA TAMBAHAN CENTER */
       text-align: center;
+      box-sizing: border-box;
     }
 
     button {
@@ -72,12 +68,9 @@
   💰 MASTER HARGA TOKO
 </div>
 
-<!-- HANYA WRAP SEARCH CARD -->
-<div class="search-box">
-  <div class="card">
-    <input id="tipe" placeholder="Cari tipe (contoh: A14)">
-    <button onclick="cari()">CARI</button>
-  </div>
+<div class="card">
+  <input id="tipe" placeholder="Cari tipe (contoh: A14)">
+  <button onclick="cari()">CARI</button>
 </div>
 
 <div class="card" id="hasil">
@@ -92,7 +85,6 @@ function formatRupiah(angka) {
   return Number(angka).toLocaleString('id-ID');
 }
 
-// SEARCH ORIGINAL
 function cari() {
 
   let tipe = document.getElementById("tipe").value;
