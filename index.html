@@ -27,6 +27,12 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
 
+    /* ✅ HANYA INI TAMBAHAN UNTUK CENTER INPUT */
+    .search-box {
+      display: flex;
+      justify-content: center;
+    }
+
     input {
       width: 100%;
       padding: 12px;
@@ -45,24 +51,11 @@
       border: none;
       border-radius: 8px;
       font-weight: bold;
-      cursor: pointer;
     }
 
     .item {
       padding: 12px;
       border-bottom: 1px solid #eee;
-    }
-
-    .row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 4px 0;
-    }
-
-    .icon {
-      width: 18px;
-      text-align: center;
     }
 
     .harga {
@@ -79,9 +72,12 @@
   💰 MASTER HARGA TOKO
 </div>
 
-<div class="card">
-  <input id="tipe" placeholder="Cari tipe (contoh: A14)">
-  <button onclick="cari()">CARI</button>
+<!-- HANYA WRAP SEARCH CARD -->
+<div class="search-box">
+  <div class="card">
+    <input id="tipe" placeholder="Cari tipe (contoh: A14)">
+    <button onclick="cari()">CARI</button>
+  </div>
 </div>
 
 <div class="card" id="hasil">
@@ -96,9 +92,7 @@ function formatRupiah(angka) {
   return Number(angka).toLocaleString('id-ID');
 }
 
-// ==========================
-// SEARCH
-// ==========================
+// SEARCH ORIGINAL
 function cari() {
 
   let tipe = document.getElementById("tipe").value;
@@ -118,25 +112,10 @@ function cari() {
     let html = "";
 
     data.forEach(item => {
-
       html += `
         <div class="item">
-
-          <div class="row">
-            <div class="icon">📦</div>
-            <div>Modal: ${formatRupiah(item.modal || 0)}</div>
-          </div>
-
-          <div class="row">
-            <div class="icon">📊</div>
-            <div>Margin: ${formatRupiah(item.margin || 0)}</div>
-          </div>
-
-          <div class="row">
-            <div class="icon">💰</div>
-            <div class="harga">Harga: ${formatRupiah(item.harga || 0)}</div>
-          </div>
-
+          <div>${item.nama || '-'}</div>
+          <div class="harga">Rp ${formatRupiah(item.harga || 0)}</div>
         </div>
       `;
     });
