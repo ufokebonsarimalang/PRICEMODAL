@@ -27,15 +27,19 @@
       box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
 
+    /* ✅ HANYA INI TAMBAHAN (CENTER CARD SEARCH SAJA) */
+    .search-card {
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ddd;
-
-      /* ✅ INI SAJA TAMBAHAN CENTER */
-      text-align: center;
       box-sizing: border-box;
     }
 
@@ -68,7 +72,8 @@
   💰 MASTER HARGA TOKO
 </div>
 
-<div class="card">
+<!-- ✅ ONLY SEARCH CARD CENTER -->
+<div class="card search-card">
   <input id="tipe" placeholder="Cari tipe (contoh: A14)">
   <button onclick="cari()">CARI</button>
 </div>
@@ -85,6 +90,7 @@ function formatRupiah(angka) {
   return Number(angka).toLocaleString('id-ID');
 }
 
+// SEARCH (TIDAK DIUBAH)
 function cari() {
 
   let tipe = document.getElementById("tipe").value;
@@ -104,10 +110,17 @@ function cari() {
     let html = "";
 
     data.forEach(item => {
+
       html += `
         <div class="item">
-          <div>${item.nama || '-'}</div>
-          <div class="harga">Rp ${formatRupiah(item.harga || 0)}</div>
+
+          <b>${item.brand}</b><br>
+          <small>${item.tipe}</small><br><br>
+
+          💰 Modal: ${formatRupiah(item.modal)}<br>
+          📊 Margin: ${formatRupiah(item.margin)}<br>
+          🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
+
         </div>
       `;
     });
@@ -117,7 +130,6 @@ function cari() {
   .catch(() => {
     h.innerHTML = "❌ Error koneksi API";
   });
-
 }
 
 </script>
