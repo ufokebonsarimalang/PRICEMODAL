@@ -11,12 +11,6 @@
       background: #f4f6fb;
     }
 
-    /* ✅ ONLY CENTER WRAPPER (TIDAK MERUSAK DESAIN) */
-    .wrap {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
     .header {
       background: #1e88e5;
       color: white;
@@ -59,6 +53,18 @@
       border-bottom: 1px solid #eee;
     }
 
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .icon {
+      width: 18px;
+      text-align: center;
+    }
+
     .harga {
       font-weight: bold;
       color: green;
@@ -69,58 +75,34 @@
 
 <body>
 
-<div class="wrap">
+<div class="header">
+  💰 MASTER HARGA TOKO
+</div>
 
-  <div class="header">
-    💰 MASTER HARGA TOKO
-  </div>
+<div class="card">
+  <input id="tipe" placeholder="Cari tipe (contoh: A14)">
+  <button onclick="cari()">CARI</button>
+</div>
 
-  <div class="card">
-    <input id="tipe" placeholder="Cari tipe (contoh: A14)">
-    <button onclick="cari()">CARI</button>
-  </div>
-
-  <div class="card" id="hasil">
-    Hasil akan muncul di sini
-  </div>
-
+<div class="card" id="hasil">
+  Hasil akan muncul di sini
 </div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwji5nEEIX2kDDhTygYVg9zAqiZd3ppBzWPr8UH-eLRcE56EeDP187BOliW4JW0F2a64Q/exec";
 
-// ==========================
-// FORMAT RUPIAH
-// ==========================
 function formatRupiah(angka) {
   return Number(angka).toLocaleString('id-ID');
 }
 
 // ==========================
-// AUTO SEARCH (REAL TIME)
-// ==========================
-let timer;
-
-document.getElementById("tipe").addEventListener("input", function () {
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    cari();
-  }, 500);
-});
-
-// ==========================
-// SEARCH FUNCTION
+// SEARCH
 // ==========================
 function cari() {
 
   let tipe = document.getElementById("tipe").value;
   let h = document.getElementById("hasil");
-
-  if (tipe.trim() === "") {
-    h.innerHTML = "Hasil akan muncul di sini";
-    return;
-  }
 
   h.innerHTML = "⏳ mencari...";
 
@@ -136,10 +118,25 @@ function cari() {
     let html = "";
 
     data.forEach(item => {
+
       html += `
         <div class="item">
-          <div>${item.nama || item.tipe || '-'}</div>
-          <div class="harga">Rp ${formatRupiah(item.harga || 0)}</div>
+
+          <div class="row">
+            <div class="icon">📦</div>
+            <div>Modal: ${formatRupiah(item.modal || 0)}</div>
+          </div>
+
+          <div class="row">
+            <div class="icon">📊</div>
+            <div>Margin: ${formatRupiah(item.margin || 0)}</div>
+          </div>
+
+          <div class="row">
+            <div class="icon">💰</div>
+            <div class="harga">Harga: ${formatRupiah(item.harga || 0)}</div>
+          </div>
+
         </div>
       `;
     });
