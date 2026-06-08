@@ -11,7 +11,7 @@
       background: #f4f6fb;
     }
 
-    /* CENTER WRAPPER (AMAN, TIDAK MERUSAK INPUT) */
+    /* ✅ ONLY CENTER WRAPPER (TIDAK MERUSAK DESAIN) */
     .wrap {
       max-width: 500px;
       margin: 0 auto;
@@ -39,8 +39,8 @@
       margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ddd;
-      text-align: center;
       box-sizing: border-box;
+      text-align: center;
     }
 
     button {
@@ -51,6 +51,7 @@
       border: none;
       border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .item {
@@ -89,6 +90,9 @@
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwji5nEEIX2kDDhTygYVg9zAqiZd3ppBzWPr8UH-eLRcE56EeDP187BOliW4JW0F2a64Q/exec";
 
+// ==========================
+// FORMAT RUPIAH
+// ==========================
 function formatRupiah(angka) {
   return Number(angka).toLocaleString('id-ID');
 }
@@ -106,7 +110,7 @@ document.getElementById("tipe").addEventListener("input", function () {
 });
 
 // ==========================
-// SEARCH
+// SEARCH FUNCTION
 // ==========================
 function cari() {
 
@@ -114,7 +118,7 @@ function cari() {
   let h = document.getElementById("hasil");
 
   if (tipe.trim() === "") {
-    h.innerHTML = "Ketik tipe untuk mencari...";
+    h.innerHTML = "Hasil akan muncul di sini";
     return;
   }
 
