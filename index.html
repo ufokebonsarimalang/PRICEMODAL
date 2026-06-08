@@ -10,6 +10,13 @@
       margin: 0;
       background: #f4f6fb;
       display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
       flex-direction: column;
       align-items: center;
     }
@@ -23,17 +30,8 @@
       font-weight: bold;
     }
 
-    /* CENTER CONTAINER */
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
     .card {
-      width: 90%;
+      width: 92%;
       margin-top: 15px;
       background: white;
       padding: 15px;
@@ -47,8 +45,9 @@
       margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ddd;
-      text-align: center; /* INPUT JADI CENTER */
+      text-align: center;
       font-size: 16px;
+      box-sizing: border-box;
     }
 
     button {
@@ -73,7 +72,6 @@
       font-size: 16px;
     }
 
-    /* LOGO BESAR */
     .logo {
       margin: 20px 0;
       text-align: center;
@@ -81,7 +79,7 @@
 
     .logo img {
       width: 80%;
-      max-width: 350px;
+      max-width: 300px;
       opacity: 0.9;
     }
   </style>
@@ -89,22 +87,24 @@
 
 <body>
 
-<div class="header">
-  💰 MASTER HARGA TOKO
-</div>
-
 <div class="container">
 
+  <div class="header">
+    💰 MASTER HARGA TOKO
+  </div>
+
+  <!-- SEARCH -->
   <div class="card">
     <input id="tipe" placeholder="Cari tipe (contoh: A14)">
     <button onclick="cari()">CARI</button>
   </div>
 
+  <!-- HASIL -->
   <div class="card" id="hasil">
-    Hasil akan muncul di sini
+    Ketik untuk mulai mencari...
   </div>
 
-  <!-- LOGO BESAR DI BAWAH -->
+  <!-- LOGO -->
   <div class="logo">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Google.png/640px-Google.png">
   </div>
@@ -119,14 +119,35 @@ function formatRupiah(angka) {
   return angka.toLocaleString('id-ID');
 }
 
+// ==========================
+// AUTO SEARCH (REAL TIME)
+// ==========================
+let timer;
+
+document.getElementById("tipe").addEventListener("input", function () {
+  clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    cari();
+  }, 500);
+});
+
+// ==========================
+// SEARCH FUNCTION
+// ==========================
 function cari() {
 
   let tipe = document.getElementById("tipe").value;
   let h = document.getElementById("hasil");
 
+  if (tipe.trim() === "") {
+    h.innerHTML = "Ketik tipe barang untuk mencari...";
+    return;
+  }
+
   h.innerHTML = "⏳ mencari...";
 
-  fetch(API_URL + "?tipe=" + tipe)
+  fetch(API_URL + "?tipe=" + encodeURIComponent(tipe))
   .then(res => res.json())
   .then(data => {
 
@@ -147,6 +168,9 @@ function cari() {
     });
 
     h.innerHTML = html;
+  })
+  .catch(() => {
+    h.innerHTML = "❌ Error koneksi API";
   });
 
 }
