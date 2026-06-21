@@ -105,33 +105,36 @@ function cari() {
 
   fetch(API_URL + "?tipe=" + encodeURIComponent(tipe))
   .then(res => res.json())
-  .then(data => {
+  .then(result => {
 
-    if (!data || data.length === 0) {
-      h.innerHTML = "❌ Tidak ditemukan";
-      return;
-    }
+  let data = result.data; // 👈 PENTING
 
-    let html = "";
+  if (!data || data.length === 0) {
+    h.innerHTML = "❌ Tidak ditemukan";
+    return;
+  }
 
-    data.forEach(item => {
+  let html = "";
 
-      html += `
-        <div class="item">
+  data.forEach(item => {
 
-          <b>${item.brand}</b><br>
-          <small>${item.tipe}</small><br><br>
+    html += `
+      <div class="item">
 
-          💰 Modal: ${formatRupiah(item.modal)}<br>
-          📊 Margin: ${formatRupiah(item.margin)}<br>
-          🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
+        <b>${item.brand}</b><br>
+        <small>${item.tipe}</small><br><br>
 
-        </div>
-      `;
-    });
+        💰 Modal: ${formatRupiah(item.modal)}<br>
+        📊 Margin: ${formatRupiah(item.margin)}<br>
+        🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
 
-    h.innerHTML = html;
-  })
+      </div>
+    `;
+  });
+
+  h.innerHTML = html;
+
+})
   .catch(() => {
     h.innerHTML = "❌ Error koneksi API";
   });
