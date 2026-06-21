@@ -107,34 +107,43 @@ function cari() {
   .then(res => res.json())
   .then(result => {
 
-  let data = result.data; // 👈 PENTING
+    let data = result.data;
 
-  if (!data || data.length === 0) {
-    h.innerHTML = "❌ Tidak ditemukan";
-    return;
-  }
+    if (!data || data.length === 0) {
+      h.innerHTML = "❌ Tidak ditemukan";
+      return;
+    }
 
-  let html = "";
+    let html = "";
 
-  data.forEach(item => {
+    data.forEach(item => {
 
-    html += `
-      <div class="item">
+      let modal = item.modal || 0;
+      let margin = item.margin || 0;
+      let harga = item.harga || 0;
 
-        <b>${item.brand}</b><br>
-        <small>${item.tipe}</small><br><br>
+      html += `
+        <div class="item">
 
-        💰 Modal: ${formatRupiah(item.modal)}<br>
-        📊 Margin: ${formatRupiah(item.margin)}<br>
-        🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
+          <b>${item.brand}</b><br>
+          <small>${item.tipe}</small><br><br>
 
-      </div>
-    `;
+          💰 Modal: ${formatRupiah(modal)}<br>
+          📊 Margin: ${formatRupiah(margin)}<br>
+          🏷️ Harga: <span class="harga">${formatRupiah(harga)}</span>
+
+        </div>
+      `;
+    });
+
+    h.innerHTML = html;
+
+  })
+  .catch(err => {
+    console.log(err);
+    h.innerHTML = "❌ Error koneksi API";
   });
-
-  h.innerHTML = html;
-
-})
+}
   .catch(() => {
     h.innerHTML = "❌ Error koneksi API";
   });
