@@ -98,9 +98,11 @@ function cari() {
 
   h.innerHTML = "⏳ mencari...";
 
-  fetch(API_URL + "?tipe=" + encodeURIComponent(tipe))
+ fetch(API_URL + "?tipe=" + encodeURIComponent(tipe))
   .then(res => res.json())
-  .then(data => {
+  .then(res => {
+
+    let data = res.data; // <-- INI PENTING
 
     if (!data || data.length === 0) {
       h.innerHTML = "❌ Tidak ditemukan";
@@ -113,25 +115,22 @@ function cari() {
 
       html += `
         <div class="item">
-
           <b>${item.brand}</b><br>
           <small>${item.tipe}</small><br><br>
 
           💰 Modal: ${formatRupiah(item.modal)}<br>
           📊 Margin: ${formatRupiah(item.margin)}<br>
           🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
-
         </div>
       `;
     });
 
     h.innerHTML = html;
   })
-  .catch(() => {
+  .catch(err => {
+    console.log(err);
     h.innerHTML = "❌ Error koneksi API";
   });
-}
-
 </script>
 
 </body>
