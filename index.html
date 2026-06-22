@@ -1,104 +1,141 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master Harga</title>
 
-<title>UFO Kebonsari</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f4f6fb;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-*{
-    box-sizing:border-box;
+    .header {
+  background: #1e88e5;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
 }
 
-body{
-    margin:0;
-    padding:25px;
-    font-family:'Outfit',sans-serif;
-    min-height:100vh;
+    .card {
+      margin: 15px;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
 
-    background:
-    radial-gradient(
-        circle at top,
-        rgba(59,130,246,.12) 0%,
-        transparent 45%
-    ),
-    linear-gradient(
-        180deg,
-        #0f172a 0%,
-        #111827 100%
-    );
+    /* ✅ HANYA INI TAMBAHAN (CENTER CARD SEARCH SAJA) */
+    .search-card {
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-    color:white;
-}
-.header{
-    text-align:center;
-    margin-bottom:30px;
-}
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
 
-.header h1{
-    font-size:52px;
-    font-weight:800;
-    margin:0;
-    letter-spacing:-2px;
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
 
-    background:linear-gradient(
-        90deg,
-        #ffffff,
-        #60a5fa
-    );
+    .item {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
 
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
+    .harga {
+      font-weight: bold;
+      color: green;
+      font-size: 16px;
+    }
+  </style>
+</head>
 
-.header p{
-    color:#94a3b8;
-    font-size:15px;
-    margin-top:8px;
-}
-.search-box{
-    max-width:700px;
-    margin:0 auto 25px;
-    display:flex;
-    gap:10px;
-}
+<body>
 
-.search-box input{
-    flex:1;
-    padding:14px;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(12px);
-    color:white;
-    font-size:16px;
-}
+<div class="header">
+  💰 MASTER HARGA TOKO
+</div>
 
-.search-box input::placeholder{
-    color:#cbd5e1;
-}
+<!-- ✅ ONLY SEARCH CARD CENTER -->
+<div class="card search-card">
+  <input id="tipe" placeholder="Cari tipe (contoh: A14)">
+  <button onclick="cari()">CARI</button>
+</div>
 
-.search-box button{
-    padding:14px 24px;
-    border:none;
-    border-radius:16px;
-    cursor:pointer;
-    font-weight:600;
-    color:white;
+<div class="card" id="hasil">
+  Hasil akan muncul di sini
+</div>
 
-    background:linear-gradient(
-        135deg,
-        #3b82f6,
-        #06b6d4
-    );
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwji5nEEIX2kDDhTygYVg9zAqiZd3ppBzWPr8UH-eLRcE56EeDP187BOliW4JW0F2a64Q/exec";
+
+function formatRupiah(angka) {
+  return Number(angka).toLocaleString('id-ID');
 }
 
-.search-box button:hover{
-    opacity:.9;
+// SEARCH (TIDAK DIUBAH)
+function cari() {
+
+  let tipe = document.getElementById("tipe").value;
+  let h = document.getElementById("hasil");
+
+  h.innerHTML = "⏳ mencari...";
+
+ fetch(API_URL + "?tipe=" + encodeURIComponent(tipe))
+  .then(res => res.json())
+  .then(res => {
+
+    let data = res.data; // <-- INI PENTING
+
+    if (!data || data.length === 0) {
+      h.innerHTML = "❌ Tidak ditemukan";
+      return;
+    }
+
+    let html = "";
+
+    data.forEach(item => {
+
+      html += `
+        <div class="item">
+          <b>${item.brand}</b><br>
+          <small>${item.tipe}</small><br><br>
+
+          💰 Modal: ${formatRupiah(item.modal)}<br>
+          📊 Margin: ${formatRupiah(item.margin)}<br>
+          🏷️ Harga: <span class="harga">${formatRupiah(item.harga)}</span>
+        </div>
+      `;
+    });
+
+    h.innerHTML = html;
+  })
+  .catch(err => {
+    console.log(err);
+    h.innerHTML = "❌ Error koneksi API";
+  });
 }
+</script>
+
+</body>
+</html>}
 
 #summary{
     max-width:1200px;
